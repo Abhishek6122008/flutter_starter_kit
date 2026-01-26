@@ -29,6 +29,11 @@ class LGConnection {
 
   bool _isConnected = false;
 
+  // 🔑 Current orbit target (used by UI)
+  double? currentLat;
+  double? currentLon;
+  double? currentZoom;
+
   static const String _baseUrl = 'http://lg1:81';
   static const String _kmlDir = '/var/www/html';
   static const String _kmlList = '/var/www/html/kmls.txt';
@@ -39,6 +44,7 @@ class LGConnection {
   );
 
   bool get isConnected => _isConnected;
+  bool get isOrbitPlaying => _orbitPlaying;
 
   // ---------------- CONNECTION ----------------
 
@@ -111,6 +117,18 @@ class LGConnection {
     );
   }
 
+  // ---------------- TARGET MEMORY ----------------
+
+  void setCurrentTarget({
+    required double lat,
+    required double lon,
+    required double zoom,
+  }) {
+    currentLat = lat;
+    currentLon = lon;
+    currentZoom = zoom;
+  }
+
   // ---------------- KML CONTROL ----------------
 
   Future<
@@ -165,7 +183,8 @@ class LGConnection {
       range: payload.range,
     );
   }
-  // ---------------- RAW KML (AGENT / API SUPPORT) ----------------
+
+  // ---------------- RAW KML (API / AGENT SUPPORT) ----------------
 
   Future<
     void
@@ -174,10 +193,8 @@ class LGConnection {
     required String fileName,
     required String kml,
   }) async {
-    // Clean existing KMLs
     await cleanKmls();
 
-    // Upload raw KML directly
     final encoded = base64Encode(
       utf8.encode(
         kml,
@@ -191,7 +208,6 @@ class LGConnection {
       "echo '$_baseUrl/$fileName' > $_kmlList",
     );
 
-    // Refresh LG
     await refresh();
   }
 
@@ -248,6 +264,13 @@ class LGConnection {
 
     await _exec(
       "echo \"flytoview=$lookAt\" > /tmp/query.txt",
+    );
+
+    // 🔑 Save target for orbit button
+    setCurrentTarget(
+      lat: lat,
+      lon: lon,
+      zoom: range,
     );
   }
 
@@ -356,6 +379,27 @@ class LGConnection {
   }
 
   // ---------------- ORBIT SYSTEM ----------------
+
+  Future<
+    void
+  >
+  toggleOrbit({
+    required double latitude,
+    required double longitude,
+    required double zoom,
+    required double tilt,
+  }) async {
+    if (_orbitPlaying) {
+      await orbitStop();
+    } else {
+      await orbitPlay(
+        latitude,
+        longitude,
+        zoom,
+        tilt,
+      );
+    }
+  }
 
   String orbitLookAtLinear(
     double latitude,

@@ -3,6 +3,9 @@ import '../../screens/task_demo/family_card.dart';
 import '../../lg/lg_connection.dart';
 import '../../models/pyramid_kml_model.dart';
 import '../../models/logo_kml_model.dart';
+import '../../api/opensky_flights.dart';
+import '../../api/utils/flight_kml_builder.dart';
+import '../../models/delhi_london_kml.dart';
 
 class TaskActions
     extends
@@ -13,6 +16,42 @@ class TaskActions
     super.key,
     required this.lg,
   });
+
+  // ✈️ LIVE FLIGHTS FUNCTION
+  Future<
+    void
+  >
+  _showFlights() async {
+    final flights = await OpenSkyFlights.getFlights(
+      lamin: 6.0,
+      lamax: 36.0,
+      lomin: 68.0,
+      lomax: 98.0,
+    );
+
+    final kml = FlightKmlBuilder.buildFlightsKml(
+      flights,
+    );
+
+    await lg.showRawKml(
+      fileName: "flights.kml",
+      kml: kml,
+    );
+
+    // Fly camera to India center
+    await lg.flyTo(
+      lat: 22.0,
+      lon: 78.0,
+      range: 4000000,
+    );
+
+    // 🔑 Set orbit target to India
+    lg.setCurrentTarget(
+      lat: 22.0,
+      lon: 78.0,
+      zoom: 4000000,
+    );
+  }
 
   @override
   Widget build(
@@ -44,34 +83,48 @@ class TaskActions
             },
           ),
 
-          // 2️⃣ SHOW PYRAMID
+          // 2️⃣ SHOW PYRAMID (EGYPT 🔥)
           FamilyCard(
             icon: Icons.change_history,
             title: "Show Pyramid",
-            subtitle: "3D colored pyramid",
+            subtitle: "3D pyramid in Egypt",
             onTap: () async {
               final payload = PyramidKmlModel.generate(
-                latitude: 28.6129, // change if you want
-                longitude: 77.2295,
+                latitude: 29.9792,
+                longitude: 31.1342,
               );
 
               await lg.showKml(
                 'pyramid.kml',
                 payload,
               );
+
+              // 🔑 Set orbit target
+              lg.setCurrentTarget(
+                lat: 29.9792,
+                lon: 31.1342,
+                zoom: 30000,
+              );
             },
           ),
 
-          // 3️⃣ FLY HOME
+          // 3️⃣ FLY HOME (DELHI)
           FamilyCard(
             icon: Icons.home,
             title: "Fly Home",
-            subtitle: "Go to home city",
+            subtitle: "Go to Delhi",
             onTap: () async {
               await lg.flyTo(
                 lat: 28.6129,
                 lon: 77.2295,
                 range: 200000,
+              );
+
+              // 🔑 Set orbit target
+              lg.setCurrentTarget(
+                lat: 28.6129,
+                lon: 77.2295,
+                zoom: 200000,
               );
             },
           ),
@@ -97,31 +150,67 @@ class TaskActions
               await lg.cleanKmls();
             },
           ),
-          // 🔥 RAW KML TEST (AGENT PIPELINE)
+
+          // 🛫 DELHI → LONDON SETUP
           FamilyCard(
-            icon: Icons.code,
-            title: "Raw KML Test",
-            subtitle: "Show raw placemark",
+            icon: Icons.flight_takeoff,
+            title: "Delhi → London",
+            subtitle: "Setup airports + route",
             onTap: () async {
-              const rawKml = '''<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2">
-<Document>
-  <name>Raw KML Test</name>
+              final payload = DelhiLondonKmlModel.generate();
 
-  <Placemark>
-    <name>Agent Test Point</name>
-    <Point>
-      <coordinates>77.2295,28.6129,0</coordinates>
-    </Point>
-  </Placemark>
-
-</Document>
-</kml>''';
-
-              await lg.showRawKml(
-                fileName: 'raw_test.kml',
-                kml: rawKml,
+              await lg.showKml(
+                "delhi_london.kml",
+                payload,
               );
+
+              // Fly to Delhi first
+              await lg.flyTo(
+                lat: 28.5562,
+                lon: 77.1000,
+                range: 30000,
+              );
+
+              // 🔑 Set orbit target to Delhi airport
+              lg.setCurrentTarget(
+                lat: 28.5562,
+                lon: 77.1000,
+                zoom: 30000,
+              );
+            },
+          ),
+
+          // 🔄 ORBIT TOGGLE (🔥 MAIN FEATURE)
+          FamilyCard(
+            icon: Icons.sync,
+            title: "Orbit",
+            subtitle: "Start / Stop orbit",
+            onTap: () async {
+              if (lg.currentLat ==
+                      null ||
+                  lg.currentLon ==
+                      null ||
+                  lg.currentZoom ==
+                      null) {
+                return;
+              }
+
+              await lg.toggleOrbit(
+                latitude: lg.currentLat!,
+                longitude: lg.currentLon!,
+                zoom: lg.currentZoom!,
+                tilt: 60,
+              );
+            },
+          ),
+
+          // ✈️ LIVE FLIGHTS DEMO 🔥🔥🔥
+          FamilyCard(
+            icon: Icons.flight,
+            title: "Live Flights",
+            subtitle: "Show planes over India",
+            onTap: () async {
+              await _showFlights();
             },
           ),
         ],
