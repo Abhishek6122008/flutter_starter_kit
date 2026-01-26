@@ -131,6 +131,7 @@ class LGConnection {
 
   // ---------------- KML CONTROL ----------------
 
+  /// Clears all loaded KMLs (manual use only)
   Future<
     void
   >
@@ -141,6 +142,7 @@ class LGConnection {
     await refresh();
   }
 
+  /// Upload + APPEND KML safely (no overwrite bug 🔥)
   Future<
     void
   >
@@ -158,12 +160,13 @@ class LGConnection {
       "echo '$encoded' | base64 -d > $_kmlDir/$fileName",
     );
     await _exec(
-      "echo '$_baseUrl/$fileName' > $_kmlList",
+      "echo '\n$_baseUrl/$fileName' >> $_kmlList",
     );
 
     await refresh();
   }
 
+  /// Show structured KML payload
   Future<
     void
   >
@@ -171,7 +174,6 @@ class LGConnection {
     String fileName,
     KmlPayload payload,
   ) async {
-    await cleanKmls();
     await sendKml(
       fileName,
       payload.kml,
@@ -193,8 +195,6 @@ class LGConnection {
     required String fileName,
     required String kml,
   }) async {
-    await cleanKmls();
-
     final encoded = base64Encode(
       utf8.encode(
         kml,
@@ -205,7 +205,7 @@ class LGConnection {
       "echo '$encoded' | base64 -d > $_kmlDir/$fileName",
     );
     await _exec(
-      "echo '$_baseUrl/$fileName' > $_kmlList",
+      "echo '\n$_baseUrl/$fileName' >> $_kmlList",
     );
 
     await refresh();
@@ -266,7 +266,7 @@ class LGConnection {
       "echo \"flytoview=$lookAt\" > /tmp/query.txt",
     );
 
-    // 🔑 Save target for orbit button
+    // Save target for orbit
     setCurrentTarget(
       lat: lat,
       lon: lon,
@@ -285,7 +285,7 @@ class LGConnection {
     );
     await Future.delayed(
       const Duration(
-        milliseconds: 500,
+        milliseconds: 400,
       ),
     );
     await _exec(
@@ -302,7 +302,7 @@ class LGConnection {
     );
     await Future.delayed(
       const Duration(
-        milliseconds: 500,
+        milliseconds: 400,
       ),
     );
     await _exec(
@@ -319,7 +319,7 @@ class LGConnection {
     );
     await Future.delayed(
       const Duration(
-        milliseconds: 500,
+        milliseconds: 400,
       ),
     );
     await _exec(
@@ -336,7 +336,7 @@ class LGConnection {
     );
     await Future.delayed(
       const Duration(
-        milliseconds: 500,
+        milliseconds: 400,
       ),
     );
     await _exec(
@@ -353,7 +353,7 @@ class LGConnection {
     );
     await Future.delayed(
       const Duration(
-        milliseconds: 500,
+        milliseconds: 400,
       ),
     );
     await _exec(
@@ -370,7 +370,7 @@ class LGConnection {
     );
     await Future.delayed(
       const Duration(
-        milliseconds: 500,
+        milliseconds: 400,
       ),
     );
     await _exec(
@@ -380,6 +380,7 @@ class LGConnection {
 
   // ---------------- ORBIT SYSTEM ----------------
 
+  /// UI toggle: one button start / stop
   Future<
     void
   >
@@ -409,7 +410,7 @@ class LGConnection {
     double bearing,
   ) {
     final lookAt =
-        '<gx:duration>0.3</gx:duration>'
+        '<gx:duration>0.4</gx:duration>'
         '<gx:flyToMode>smooth</gx:flyToMode>'
         '<LookAt>'
         '<longitude>$longitude</longitude>'
@@ -460,8 +461,8 @@ class LGConnection {
 
     _orbitPlaying = true;
 
-    const int steps = 60;
-    const int stepDurationMs = 400;
+    const int steps = 90; // smooth circle
+    const int stepDurationMs = 250;
     int currentStep = 0;
     bool isMoving = false;
 
@@ -516,6 +517,7 @@ class LGConnection {
     _orbitTimer = null;
     _orbitPlaying = false;
 
+    // Return camera to last stable position
     if (_lastOrbitPosition !=
         null) {
       await _exec(

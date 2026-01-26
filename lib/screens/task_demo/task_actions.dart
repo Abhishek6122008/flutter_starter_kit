@@ -82,6 +82,26 @@ class TaskActions
               );
             },
           ),
+          FamilyCard(
+            icon: Icons.flight_takeoff,
+            title: "Delhi → London",
+            subtitle: "Markers + Route + Pyramids",
+            onTap: () async {
+              final payload = DelhiLondonKmlModel.generate();
+
+              await lg.showKml(
+                "delhi_london.kml",
+                payload,
+              );
+
+              // Fly to Delhi and set orbit target
+              await lg.flyTo(
+                lat: 28.5562,
+                lon: 77.1000,
+                range: 30000,
+              );
+            },
+          ),
 
           // 2️⃣ SHOW PYRAMID (EGYPT 🔥)
           FamilyCard(
@@ -148,35 +168,6 @@ class TaskActions
             subtitle: "Remove all KML",
             onTap: () async {
               await lg.cleanKmls();
-            },
-          ),
-
-          // 🛫 DELHI → LONDON SETUP
-          FamilyCard(
-            icon: Icons.flight_takeoff,
-            title: "Delhi → London",
-            subtitle: "Setup airports + route",
-            onTap: () async {
-              final payload = DelhiLondonKmlModel.generate();
-
-              await lg.showKml(
-                "delhi_london.kml",
-                payload,
-              );
-
-              // Fly to Delhi first
-              await lg.flyTo(
-                lat: 28.5562,
-                lon: 77.1000,
-                range: 30000,
-              );
-
-              // 🔑 Set orbit target to Delhi airport
-              lg.setCurrentTarget(
-                lat: 28.5562,
-                lon: 77.1000,
-                zoom: 30000,
-              );
             },
           ),
 
