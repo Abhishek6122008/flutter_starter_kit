@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../screens/connection/connection_screen.dart';
-import '../../screens/widgets/gradient_background.dart';
+import 'package:flutter_starter_kit/presentation/home/home_screen.dart';
+import 'package:flutter_starter_kit/presentation/home/lg_actions_panels.dart';
+import '../../widgets/gradient_background.dart';
 
 class StartScreen
     extends
@@ -55,8 +56,8 @@ class StartScreen
                   MaterialPageRoute(
                     builder:
                         (
-                          context,
-                        ) => const ConnectionScreen(),
+                          _,
+                        ) => const HomeScreen(),
                   ),
                 );
               },

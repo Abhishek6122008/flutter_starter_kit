@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import '../widgets/gradient_background.dart';
-import '../../lg/lg_connection.dart';
-import '../task_demo/task_demo_screen.dart';
+import '../../widgets/gradient_background.dart';
+import '../../lg/connection/lg_connection.dart';
+import '../home/home_screen.dart';
+import 'qr_scanner_sheet.dart';
 
 class ConnectionScreen
     extends
@@ -68,14 +69,14 @@ class _ConnectionScreenState
         },
       );
 
-      // 🔥 GO DIRECTLY TO TASK DEMO SCREEN
+      // ✅ Go to your real HomeScreen
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder:
               (
                 _,
-              ) => TaskDemoScreen(
+              ) => HomeScreen(
                 lg: lg,
               ),
         ),
@@ -95,7 +96,15 @@ class _ConnectionScreenState
     BuildContext context,
   ) {
     return Scaffold(
-      body: const GradientBackground(
+      // ✅ back button + title
+      appBar: AppBar(
+        title: const Text(
+          'Settings',
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: GradientBackground(
         child: SafeArea(
           child: _ConnectionBody(),
         ),
@@ -127,7 +136,7 @@ class _ConnectionBody
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(
-              height: 40,
+              height: 20,
             ),
 
             const Text(
@@ -137,6 +146,58 @@ class _ConnectionBody
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
+            ),
+
+            const SizedBox(
+              height: 12,
+            ),
+
+            ElevatedButton.icon(
+              icon: const Icon(
+                Icons.qr_code_scanner,
+              ),
+              label: const Text(
+                "Scan QR",
+              ),
+              onPressed: () async {
+                final result =
+                    await showModalBottomSheet<
+                      String
+                    >(
+                      context: context,
+                      isScrollControlled: true,
+                      builder:
+                          (
+                            _,
+                          ) => const QrScannerSheet(),
+                    );
+
+                if (result !=
+                    null) {
+                  final value = result.trim();
+
+                  final cleaned = value
+                      .replaceAll(
+                        'http://',
+                        '',
+                      )
+                      .replaceAll(
+                        'https://',
+                        '',
+                      );
+
+                  final parts = cleaned.split(
+                    ':',
+                  );
+
+                  state.ipController.text = parts[0];
+
+                  if (parts.length >
+                      1) {
+                    state.portController.text = parts[1];
+                  }
+                }
+              },
             ),
 
             const SizedBox(

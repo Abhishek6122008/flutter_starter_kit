@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
-import 'screens/task_demo/start_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void
-main() {
+import 'presentation/splash/splash_screen.dart';
+
+Future<
+  void
+>
+main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // ✅ REQUIRED – fixes NotInitializedError
+  await dotenv.load(
+    fileName: ".env",
+  );
+
   runApp(
     const MyApp(),
   );
@@ -22,7 +33,6 @@ class MyApp
     return MaterialApp(
       title: 'Agentic Flutter Starter Kit',
       debugShowCheckedModeBanner: false,
-
       theme: ThemeData(
         brightness: Brightness.dark,
         elevatedButtonTheme: ElevatedButtonThemeData(
@@ -40,6 +50,7 @@ class MyApp
         ),
       ),
 
+      // ✅ Splash → Home → Settings flow
       home: const StartScreen(),
     );
   }

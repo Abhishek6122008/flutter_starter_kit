@@ -1,4 +1,4 @@
-import 'package:flutter_starter_kit/models/common_kml.dart';
+import 'package:flutter_starter_kit/kmls/common_kml.dart';
 
 class PolygonKmlBuilder {
   static KmlPayload buildTriangle({

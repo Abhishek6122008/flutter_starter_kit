@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:dartssh2/dartssh2.dart';
-import '../models/common_kml.dart';
+import '../../kmls/common_kml.dart';
 
 /// Holds LG connection configuration
 class LGConfig {
