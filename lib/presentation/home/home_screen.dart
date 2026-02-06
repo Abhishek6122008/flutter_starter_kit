@@ -7,15 +7,16 @@ import '../../api/geocoding_api.dart';
 import '../../kmls/point_kml_builder.dart';
 import '../../kmls/common_kml.dart';
 import 'package:flutter_starter_kit/presentation/connection/connection_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class HomeScreen
     extends
         StatefulWidget {
-  final LGConnection? lg; // ✅ changed
+  final LGConnection? lg;
 
   const HomeScreen({
     super.key,
-    this.lg, // ✅ changed
+    this.lg,
   });
 
   @override
@@ -33,18 +34,25 @@ class _HomeScreen
   final TextEditingController placeController = TextEditingController();
 
   final GeocodingApi geoApi = OpenCageGeocodingApi(
-    '1f99925886494233ade771b7e4acdd22',
+    dotenv.env['OPENCAGE_API_KEY']!,
   );
+
+  LGConnection? _lg; // ✅ added
 
   bool loading = false;
   String? error;
+
+  @override
+  void initState() {
+    super.initState();
+    _lg = widget.lg; // ✅ added
+  }
 
   Future<
     void
   >
   _showPlace() async {
-    // ✅ added guard
-    if (widget.lg ==
+    if (_lg ==
         null) {
       setState(
         () {
@@ -92,14 +100,12 @@ class _HomeScreen
         range: 50000,
       );
 
-      await widget.lg!.showKml(
-        // ✅ only ! added
+      await _lg!.showKml(
         'place.kml',
         payload,
       );
 
-      await widget.lg!.flyTo(
-        // ✅ only ! added
+      await _lg!.flyTo(
         lat: point.lat,
         lon: point.lng,
         range: 50000,
@@ -158,8 +164,8 @@ class _HomeScreen
                         Icons.settings,
                         color: Colors.white,
                       ),
-                      onPressed: () {
-                        Navigator.push(
+                      onPressed: () async {
+                        final result = await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder:
@@ -168,6 +174,15 @@ class _HomeScreen
                                 ) => const ConnectionScreen(),
                           ),
                         );
+
+                        if (result
+                            is LGConnection) {
+                          setState(
+                            () {
+                              _lg = result; // ✅ update connection
+                            },
+                          );
+                        }
                       },
                     ),
                   ],
@@ -261,9 +276,8 @@ class _HomeScreen
                 height: 20,
               ),
 
-              // 🔥 MAIN LG ACTIONS (already supports null now)
               TaskActions(
-                lg: widget.lg,
+                lg: _lg,
               ),
             ],
           ),
