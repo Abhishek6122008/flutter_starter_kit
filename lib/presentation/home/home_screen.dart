@@ -149,14 +149,17 @@ class _HomeScreen
                   top: 20,
                 ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      "Liquid Galaxy Flutter Starter",
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                    const Expanded(
+                      child: Text(
+                        "Liquid Galaxy Flutter Starter",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                     IconButton(
@@ -179,7 +182,7 @@ class _HomeScreen
                             is LGConnection) {
                           setState(
                             () {
-                              _lg = result; // ✅ update connection
+                              _lg = result;
                             },
                           );
                         }
