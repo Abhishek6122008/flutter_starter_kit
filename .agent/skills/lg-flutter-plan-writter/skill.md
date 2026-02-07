@@ -179,6 +179,28 @@ Ask at least:
 If the student cannot answer clearly, you must pause execution and explain again.
 
 ---
+## Multi-feature planning support (MANDATORY)
+
+If the incoming project context contains more than one feature, you must:
+
+- treat each feature as an independent planning unit
+- create a separate plan file for each feature
+- run the full Educational verification phase for each feature before execution
+
+Each plan file must be saved as:
+
+docs/plans/YYYY-MM-DD-<feature-slug>-plan.md
+
+You must not merge multiple features into a single plan file.
+
+Each feature plan must:
+
+- reference only the Flutter skeleton layers
+- reuse existing API, KML and LG connection abstractions when possible
+- clearly identify which UI screen(s) belong to that feature
+
+After finishing one feature plan and its verification, proceed to the next feature in the intake list.
+
 
 ## 🔁 Execution handoff
 
