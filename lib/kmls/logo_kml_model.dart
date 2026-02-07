@@ -1,5 +1,20 @@
-class kmllogo {
-  static String generatekml() {
+// SKELETON: Liquid Galaxy logo overlay KML builder.
+//
+// This builder generates a ScreenOverlay KML for displaying
+// the Liquid Galaxy logo on cluster screens.
+//
+// NOTE:
+// The image link is intentionally kept as-is, as requested.
+
+class KmlLogo {
+  /// Generates a full KML document containing a ScreenOverlay
+  /// with the Liquid Galaxy logo.
+  ///
+  /// SKELETON RULES:
+  /// - This method must return a complete KML document.
+  /// - Agents may add parameters (position, size, visibility),
+  ///   but must preserve backward compatibility.
+  static String generateKml() {
     return '''<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
 <Document>

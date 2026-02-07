@@ -1,33 +1,31 @@
+// SKELETON: Starter splash screen for the LG agentic Flutter kit.
+// This screen is intentionally simple and contains no application logic.
+// Navigation targets and workflows are injected by Antigravity agents.
+
 import 'package:flutter/material.dart';
-import 'package:flutter_starter_kit/presentation/home/home_screen.dart';
-import 'package:flutter_starter_kit/presentation/home/lg_actions_panels.dart';
+
 import '../../widgets/gradient_background.dart';
 
-class StartScreen
-    extends
-        StatelessWidget {
-  const StartScreen({
-    super.key,
-  });
+class StartScreen extends StatelessWidget {
+  const StartScreen({super.key});
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
+  Widget build(BuildContext context) {
     return GradientBackground(
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            // SKELETON BRANDING PLACEHOLDER
+            // Agents may replace this asset when generating a real app.
             Image.asset(
               'assets/lg_logo.png',
-              width: 240,
+              width: 220,
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
+
             const Text(
-              'Agentic Flutter Starter Kit',
+              'LG Agentic Flutter Starter Kit',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -35,35 +33,36 @@ class StartScreen
                 decoration: TextDecoration.none,
               ),
             ),
-            const SizedBox(
-              height: 8,
-            ),
+            const SizedBox(height: 8),
+
             const Text(
-              'Liquid Galaxy Project',
+              'Liquid Galaxy – Antigravity & Gemini workflow demo',
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.white70,
                 decoration: TextDecoration.none,
               ),
             ),
-            const SizedBox(
-              height: 30,
-            ),
+
+            const SizedBox(height: 32),
+
             ElevatedButton(
               onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder:
-                        (
-                          _,
-                        ) => const HomeScreen(),
+                // SKELETON HOOK:
+                // Real navigation and workflow startup
+                // must be injected by agent workflows.
+                //
+                // Example (generated later):
+                // Navigator.pushReplacementNamed(context, '/home');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'Starter kit skeleton – no workflow bound yet.',
+                    ),
                   ),
                 );
               },
-              child: const Text(
-                'Start',
-              ),
+              child: const Text('Start workflow'),
             ),
           ],
         ),

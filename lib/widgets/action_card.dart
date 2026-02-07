@@ -1,8 +1,9 @@
+// SKELETON: Reusable UI card for workflow actions.
+// This widget must remain UI-only and must not contain any business logic.
+
 import 'package:flutter/material.dart';
 
-class FamilyCard
-    extends
-        StatelessWidget {
+class FamilyCard extends StatelessWidget {
   const FamilyCard({
     super.key,
     required this.icon,
@@ -17,22 +18,16 @@ class FamilyCard
   final VoidCallback onTap;
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white10,
-          borderRadius: BorderRadius.circular(
-            20,
-          ),
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(
-            16,
-          ),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -53,16 +48,12 @@ class FamilyCard
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(
-                    height: 4,
-                  ),
+                  const SizedBox(height: 4),
                   Text(
                     subtitle,
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.white.withOpacity(
-                        0.7,
-                      ),
+                      color: Colors.white.withOpacity(0.7),
                     ),
                   ),
                 ],

@@ -1,0 +1,10 @@
+name: lg_flutter_agent
+description: Agentic environment to build Liquid Galaxy Flutter applications
+
+llm:
+  provider: google
+  model: gemini
+
+skills_path: ./skills
+workflows_path: ./workflows
+rules_path: ./rules
