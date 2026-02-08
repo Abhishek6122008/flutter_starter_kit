@@ -45,6 +45,25 @@ lib/data/kmls/
 lib/lg/  
 
 ---
+## 🧩 Mandatory screen wiring rules
+
+Generated Flutter screens must:
+
+- depend only on API contracts from lib/api/
+- depend only on KML adapters from lib/data/kmls/
+- depend only on the LG sender contract from lib/lg/lg_kml_sender.dart
+
+Generated screens must not:
+
+- perform HTTP requests
+- import KML builders directly
+- import LG transport implementations
+- generate or embed API keys
+
+All screens must receive their dependencies via constructors
+to allow agent-generated dependency injection.
+
+---
 
 ## 🧩 Allowed UI responsibilities
 

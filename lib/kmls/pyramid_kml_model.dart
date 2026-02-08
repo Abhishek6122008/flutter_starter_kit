@@ -3,10 +3,21 @@
 // This model generates a simple 3D-like polygon structure that can be used
 // as a visual demo object in Liquid Galaxy.
 
+import 'kml_feature.dart';
 import 'common_kml.dart';
 
-class PyramidKmlModel {
-  /// Generates a simple pyramid-like polygon and wraps it in a KmlPayload.
+class PyramidKmlModel
+    implements
+        KmlFeature {
+  final double latitude;
+  final double longitude;
+
+  const PyramidKmlModel({
+    required this.latitude,
+    required this.longitude,
+  });
+
+  /// Backward-compatible static API.
   ///
   /// SKELETON RULES:
   /// - The returned KML must be a fragment (no <kml> root element).
@@ -15,10 +26,19 @@ class PyramidKmlModel {
     required double latitude,
     required double longitude,
   }) {
+    return PyramidKmlModel(
+      latitude: latitude,
+      longitude: longitude,
+    ).build();
+  }
+
+  @override
+  KmlPayload build() {
     final lon = longitude;
     final lat = latitude;
 
-    final kml = '''
+    final kml =
+        '''
 <Placemark>
   <name>Pyramid</name>
   <Style>

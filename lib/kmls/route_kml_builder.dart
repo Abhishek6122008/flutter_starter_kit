@@ -17,7 +17,6 @@ class RouteKmlBuilder {
     required double toLon,
     required String name,
   }) {
-    // SKELETON BASE IMPLEMENTATION
     return '''
 <Placemark>
   <name>$name</name>

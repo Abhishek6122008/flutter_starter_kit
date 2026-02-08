@@ -16,7 +16,6 @@ class PointKmlBuilder {
     required double latitude,
     required double longitude,
   }) {
-    // SKELETON BASE IMPLEMENTATION
     return '''
 <Placemark>
   <name>$name</name>

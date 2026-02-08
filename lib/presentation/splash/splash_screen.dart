@@ -6,11 +6,17 @@ import 'package:flutter/material.dart';
 
 import '../../widgets/gradient_background.dart';
 
-class StartScreen extends StatelessWidget {
-  const StartScreen({super.key});
+class StartScreen
+    extends
+        StatelessWidget {
+  const StartScreen({
+    super.key,
+  });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     return GradientBackground(
       child: Center(
         child: Column(
@@ -22,7 +28,9 @@ class StartScreen extends StatelessWidget {
               'assets/lg_logo.png',
               width: 220,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(
+              height: 20,
+            ),
 
             const Text(
               'LG Agentic Flutter Starter Kit',
@@ -33,7 +41,9 @@ class StartScreen extends StatelessWidget {
                 decoration: TextDecoration.none,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(
+              height: 8,
+            ),
 
             const Text(
               'Liquid Galaxy – Antigravity & Gemini workflow demo',
@@ -44,7 +54,9 @@ class StartScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 32),
+            const SizedBox(
+              height: 32,
+            ),
 
             ElevatedButton(
               onPressed: () {
@@ -54,7 +66,9 @@ class StartScreen extends StatelessWidget {
                 //
                 // Example (generated later):
                 // Navigator.pushReplacementNamed(context, '/home');
-                ScaffoldMessenger.of(context).showSnackBar(
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(
                   const SnackBar(
                     content: Text(
                       'Starter kit skeleton – no workflow bound yet.',
@@ -62,7 +76,9 @@ class StartScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text('Start workflow'),
+              child: const Text(
+                'Start workflow',
+              ),
             ),
           ],
         ),

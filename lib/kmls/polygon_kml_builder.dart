@@ -4,15 +4,31 @@
 // Agent workflows may extend this builder to support arbitrary shapes,
 // styles and advanced metadata.
 
+import 'kml_feature.dart';
 import 'common_kml.dart';
 
-class PolygonKmlBuilder {
-  /// Builds a triangular polygon and wraps it into a KmlPayload.
-  ///
-  /// SKELETON RULES:
-  /// - Returned KML must be a complete document (<kml> root).
-  /// - Geometry generation strategies may be replaced by agents.
-  /// - Styling must remain optional and extensible.
+class PolygonKmlBuilder
+    implements
+        KmlFeature {
+  final String name;
+  final double latitude;
+  final double longitude;
+  final double size;
+  final double height;
+  final String color;
+  final double range;
+
+  const PolygonKmlBuilder({
+    required this.name,
+    required this.latitude,
+    required this.longitude,
+    this.size = 0.01,
+    this.height = 3000,
+    this.color = "66ffcc00",
+    this.range = 100000,
+  });
+
+  /// Backward-compatible static API.
   static KmlPayload buildTriangle({
     required String name,
     required double latitude,
@@ -22,7 +38,21 @@ class PolygonKmlBuilder {
     String color = "66ffcc00",
     double range = 100000,
   }) {
-    final kml = '''
+    return PolygonKmlBuilder(
+      name: name,
+      latitude: latitude,
+      longitude: longitude,
+      size: size,
+      height: height,
+      color: color,
+      range: range,
+    ).build();
+  }
+
+  @override
+  KmlPayload build() {
+    final kml =
+        '''
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
 <Document>

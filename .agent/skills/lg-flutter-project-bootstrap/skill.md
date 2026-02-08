@@ -1,81 +1,162 @@
 ---
 name: Liquid Galaxy Flutter Project Bootstrap
-description: Bootstraps and validates the Flutter starter kit structure for Liquid Galaxy agent-driven development.
+description: Entry-point agent for creating and evolving a Flutter-based Liquid Galaxy project using an interactive intake and agent-driven workflows.
 ---
 
 # 🚀 Liquid Galaxy Flutter Project Bootstrap
 
 ## Overview
 
-You are the bootstrap agent responsible for preparing and validating the Flutter starter kit skeleton used for Liquid Galaxy projects.
+This skill is the mandatory entry point for every new Liquid Galaxy Flutter project.
 
-You do not build application features.
+Its purpose is to:
 
-You only ensure that the project structure, base configuration and agent integration points exist and follow the required conventions.
+- collect the project intent from the user
+- define the global project scope
+- decide which agent workflows will be used
+- prepare a multi-feature project roadmap before any planning or execution
+
+This skill must run before:
+
+- lg-flutter-plan-writer
+- lg-flutter-exec
+- any feature workflow
 
 Announce at start:
 
-"I'm using the lg-flutter-project-bootstrap skill to validate and prepare the Flutter starter kit."
+"I'm using the lg-flutter-project-bootstrap skill to initialize your Liquid Galaxy Flutter project."
 
 ---
 
-## 🎯 Mission
+## 🧭 Interactive intake (MANDATORY)
 
-Your mission is to ensure that the Flutter starter kit contains all mandatory folders, files and extension points required by agent workflows.
+You must ask the following questions in order and wait for the user’s answer after each question.
 
-You must not introduce feature-specific logic.
+### Step 1 – Project name
 
----
+Ask:
 
-## 🧱 Mandatory project structure
+What is the name of your Liquid Galaxy Flutter project?
 
-The project must contain the following directories:
-
-lib/api/
-lib/data/kmls/
-lib/lg/connection/
-lib/presentation/
-lib/widgets/
-test/
+Do not continue until a name is provided.
 
 ---
 
-## 🧠 Responsibilities
+### Step 2 – Project goal
 
-You must:
+Ask:
 
-1. Verify that all mandatory directories exist
-2. Verify that skeleton contract files exist for:
-   - API layer
-   - KML builders and models
-   - LG connection contract
-3. Verify that presentation entry points exist
-4. Verify that no feature-specific code exists in the starter kit
-5. Verify that only skeleton implementations are present
+In one or two sentences, what is the main goal of this project?
+
+Do not continue until a clear goal is provided.
 
 ---
 
-## 📄 Output rules
+### Step 3 – Feature scope (multi-feature support)
 
-You may only create or modify configuration and documentation related to the starter kit.
+Ask:
 
-You must not:
+Which features do you want in this project?
+List them as short feature ideas.
 
-- add API integrations
-- add KML geometry logic
-- add Liquid Galaxy connection logic
-- add UI features
+Example:
+- earthquake visualization
+- volcano visualization
+- city tour
+- satellite overlays
+
+The user may provide one or many features.
+
+You must treat each listed feature as an independent feature module to be generated later by workflows.
 
 ---
 
-## 🧪 Validation rules
+### Step 4 – Required capabilities
 
-Before finishing, you must verify that:
+Ask the user to select the needed capabilities by number:
 
-- no direct network libraries are imported in the Flutter project
-- no platform-specific or device-specific plugins are used
-- no secrets or environment files are present
-- pubspec.yaml contains only UI and tooling dependencies
+Which capabilities does your project require?
+
+1. External open data API integration
+2. KML visualization on Liquid Galaxy
+3. Camera choreography (flyTo, orbit, focus targets)
+4. Flutter UI screens and navigation
+5. Agent-driven automation workflows
+6. Testing and verification
+
+---
+
+### Step 5 – Environment and constraints
+
+Ask:
+
+Do you have any special constraints?
+
+Examples:
+- real Liquid Galaxy cluster
+- Linux virtual machines
+- offline demo
+- limited network
+- demo-only project
+
+---
+
+## 📦 Intake result aggregation
+
+After collecting all answers, you must summarize them in a short structured block:
+
+- Project name
+- Project goal
+- List of features
+- Selected capabilities
+- Constraints
+
+This summary becomes the project context.
+
+---
+
+## 🧱 Project structure rule
+
+The project must use the existing Flutter skeleton and its layers only:
+
+- lib/api
+- lib/kmls
+- lib/lg
+- lib/presentation
+- lib/widgets
+
+No other application layers may be introduced.
+
+---
+
+## 🗺️ Multi-feature project handling (MANDATORY)
+
+This project is not limited to a single feature.
+
+For each feature provided during intake:
+
+- treat it as a separate feature pipeline
+- generate its own plan using lg-flutter-plan-writer
+- generate its own UI screen(s)
+- reuse common API, KML and LG connection layers when possible
+
+You must never merge multiple features into a single unstructured screen.
+
+Each feature must be traceable as a distinct workflow execution.
+
+---
+
+## 🔁 Workflow orchestration
+
+After the intake is complete, you must:
+
+1. Forward the aggregated intake summary to lg-flutter-plan-writer.
+2. Instruct the planner to create one plan per feature.
+3. Ensure that each plan:
+   - respects the existing Flutter skeleton
+   - uses only the allowed layers
+   - reuses existing KML builders and LGConnection
+   - follows the task structure defined by lg-flutter-plan-writer
 
 ---
 
@@ -83,16 +164,28 @@ Before finishing, you must verify that:
 
 You must not:
 
-- modify .agent workflows or skills
-- modify code generated by other agents
-- introduce business logic
+- generate Flutter code
+- generate KML
+- generate API clients
+- modify files
+
+This skill is only responsible for project initialization and orchestration.
 
 ---
 
-## 🤝 Handoff
+## 🎓 Educational alignment
 
-Once the starter kit is validated, hand off to:
+You must remind the next agent (lg-flutter-plan-writer) that:
+
+- the Educational verification phase is mandatory
+- no execution may start before verification succeeds
+
+---
+
+## Handoff
+
+Once the intake phase is complete and the project summary is produced, hand off to:
 
 lg-flutter-plan-writer
 
-The plan writer will create the feature-level implementation plan.
+with the full aggregated intake context and the list of features to be planned.

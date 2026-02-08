@@ -1,32 +1,29 @@
 ---
 name: Liquid Galaxy Flutter KML Pipeline
-description: Converts structured data and visual KML design into Flutter KML builder usage and KmlPayload objects for Liquid Galaxy workflows.
+description: Converts structured domain data into KML features for the Liquid Galaxy Flutter starter kit.
 ---
 
 # 🗺️ Liquid Galaxy Flutter KML Pipeline
 
 ## Overview
 
-You are the technical pipeline agent responsible for transforming:
+You are the KML pipeline agent responsible for converting structured domain data
+provided by the API layer into KML features that can be sent to the Liquid Galaxy rig.
 
-- structured data produced by Flutter API integration skills
-- visual specifications produced by the Liquid Galaxy KML Visual Artist
-
-into concrete Flutter KML builder usage that fits the existing Flutter starter-kit skeleton.
-
-You must never introduce new rendering systems, new file structures or new transport mechanisms.
+You must only operate in the KML layer.
 
 Announce at start:
 
-"I'm using the lg-flutter-kml-pipeline skill to generate KML builders and payloads for the Flutter starter kit."
+"I'm using the lg-flutter-kml-pipeline skill to generate KML features for the Flutter starter kit."
 
 ---
 
 ## 🎯 Mission
 
-Your mission is to generate or extend Flutter code that converts structured inputs into KML using the existing builders and models and produces KmlPayload objects that can be consumed by the Liquid Galaxy connection contract.
+Generate or extend KML feature builders and adapters that convert domain objects into
+Liquid Galaxy compatible KML documents.
 
-You only operate inside the KML layer of the Flutter starter kit.
+You must follow the starter kit KML contracts.
 
 ---
 
@@ -39,64 +36,76 @@ lib/data/kmls/
 You must not modify:
 
 lib/api/
-lib/lg/
 lib/presentation/
 lib/widgets/
+lib/lg/
 
 ---
 
-## 🧩 Allowed builders and models
+## 🧩 Mandatory KML contracts
 
-You must exclusively use the following existing builders and models.
+All generated KML features must follow:
 
-Point builder  
-File: lib/data/kmls/point_kml_builder.dart  
-Class: PointKmlBuilder
+- KmlFeature
+- KmlPayload
 
-Polygon builder  
-File: lib/data/kmls/polygon_kml_builder.dart  
-Class: PolygonKmlBuilder
+Every generated feature must:
 
-Route builder  
-File: lib/data/kmls/route_kml_builder.dart  
-Class: RouteKmlBuilder
+- implement `KmlFeature`
+- expose a `build()` method returning `KmlPayload`
 
-Pyramid model  
-File: lib/data/kmls/pyramid_kml_model.dart  
-Class: PyramidKmlModel
+---
 
-Logo overlay model  
-File: lib/data/kmls/logo_kml_model.dart  
-Class: KmlLogo
+## 🧩 Fragment vs document rule
 
-Common payload model  
-File: lib/data/kmls/common_kml.dart  
-Class: KmlPayload
+If a builder generates geometry only:
 
-You must not introduce new KML builder classes unless explicitly requested by a higher-level workflow.
+- it may return KML fragments (Placemark, LineString, Polygon, etc.)
+
+If a builder is a feature entry point:
+
+- it must generate a full KML document with `<kml>` root
+- and return it through `KmlPayload`
 
 ---
 
 ## 🔁 Input sources
 
-You receive your inputs from:
+You receive structured domain objects from:
 
-- lg-kml-artist (visual and spatial design description)
-- lg-flutter-api-integration (structured data output)
-- lg-flutter-plan-writer (task planning context)
+- lg-flutter-api-integration
+- lg-experience-designer
+- lg-flutter-plan-writer
+
+You must never call external APIs directly.
 
 ---
 
 ## 🧠 Responsibilities
 
-For every feature request, you must:
+For every KML generation task you must:
 
-1. Select the appropriate existing KML builder or model
-2. Map structured data fields to geometry parameters
-3. Produce valid KML fragments or full KML documents using the allowed builders
-4. Wrap full-document outputs into KmlPayload when appropriate
-5. Ensure latitude, longitude and range are provided correctly
-6. Keep geometry simple and visually readable on large Liquid Galaxy displays
+1. Identify the required geometry type
+   (point, route, polygon, overlay, animated tour, time based feature, etc.)
+2. Generate or extend a KML builder or adapter
+3. Convert domain objects into KML geometry
+4. Return a KmlPayload ready to be sent to Liquid Galaxy
+
+---
+
+## 🧩 Adapter rule (very important)
+
+When domain objects come from the API layer:
+
+You must create adapter builders such as:
+
+- Geocoding → KML adapter
+- dataset → time based KML adapter
+
+Adapters must:
+
+- depend on API domain models
+- generate KML using existing low-level builders where possible
 
 ---
 
@@ -106,14 +115,11 @@ You must generate or modify only Dart files inside:
 
 lib/data/kmls/
 
-All generated methods must be deterministic and side-effect free.
-
 You must not:
 
-- call network APIs
-- reference Liquid Galaxy connection logic
-- perform file system operations
-- introduce asynchronous logic
+- embed HTTP logic
+- import UI code
+- import LG connection code
 
 ---
 
@@ -121,10 +127,10 @@ You must not:
 
 Before finishing, you must verify that:
 
-- generated KML contains valid XML structure
-- coordinate order is longitude,latitude,altitude
-- builders returning fragments do not include a root kml element
-- builders returning full documents include exactly one kml root element
+- every new feature implements KmlFeature
+- every public build entry returns KmlPayload
+- API layer types are used only as inputs
+- no network or UI dependencies exist
 
 ---
 
@@ -132,20 +138,15 @@ Before finishing, you must verify that:
 
 You must not:
 
-- modify API layer files
-- modify UI or presentation files
-- modify LG connection contract files
-- introduce external KML libraries
-- introduce new geometry engines
-
-You must only work with the builders and models defined in this project.
+- generate Flutter widgets
+- generate API clients
+- access presentation code
+- access LG connection logic
 
 ---
 
 ## 🤝 Handoff
 
-Once the KML generation logic is completed, hand off to:
+Once KML features are generated, hand off to:
 
-lg-lg-connection-driver
-
-The driver will be responsible for sending the generated KmlPayload to the Liquid Galaxy cluster.
+lg-flutter-screen-generator
